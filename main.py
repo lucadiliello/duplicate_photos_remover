@@ -12,8 +12,8 @@ import argparse
 
 parser = argparse.ArgumentParser(description = 'Delete duplicate photos from a folder')
 parser.add_argument('-p', type=str, help='Path of the directory containing the photos to be checked', dest='directory')
-parser.add_argument("-s", help="Minumum similar ratio, between 0.0 and 1.0", type=float, dest='threshold', default=0.9)
-parser.add_argument("-m", help="Maximum size ratio between two files (smaller means fast process)", type=float, dest='multiplicator', default=1.35)
+parser.add_argument("-s", help="Minumum similar ratio, between 0.0 and 1.0", type=float, dest='threshold', default=0.90)
+parser.add_argument("-m", help="Maximum size ratio between two files (smaller means fast process)", type=float, dest='multiplicator', default=1.2)
 parser.add_argument("-n", help="Number of threads", type=int, dest='n_threads', default=16)
 args = parser.parse_args()
 
@@ -48,7 +48,7 @@ to_be_deleted = [False] * number_of_files
 
 assert(len(file_names) == len(file_sizes))
 
-print("Number of files to be checked: %d\n" % number_of_files)
+print("Number of files to check: %d\n" % number_of_files)
 
 cache = dict()
 
@@ -83,10 +83,10 @@ for i in range(len(file_names)):
 
     j = i + 1
 
-    while (j < len(file_names)) and (file_sizes[j] < multiplicator * file_sizes[i]):
+    while (j < number_of_files) and (file_sizes[j] < multiplicator * file_sizes[i]):
 
         threads = []
-        while (j < len(file_names)) and (file_sizes[j] < multiplicator * file_sizes[i]) and (len(threads) <= n_threads):
+        while (j < number_of_files) and (file_sizes[j] < multiplicator * file_sizes[i]) and (len(threads) <= n_threads):
             if to_be_deleted[j]:
                 j += 1
                 continue
@@ -101,7 +101,7 @@ for i in range(len(file_names)):
 
     cache.pop(i)
 
-    print("\rAdvancement: {:5.2f}%".format((i + 1.0)*100 / len(file_names)), end = "")
+    print("\rAdvancement: {:5.2f}%".format((i + 1.0)*100 / number_of_files), end = "")
 
 print("\nFound %d duplicates, now removing them" % sum([1 if x else 0 for x in to_be_deleted]) )
 #removing files
