@@ -9,7 +9,7 @@ cd .../path/to/this/project/...
 chmod +x main.py
 ```
 
-Move all the photos you want to check for duplicated in a single folder.
+Move all the photos you want to check for duplicates in a single folder.
 ## WARNING: Make sure to back up all your photos, I will not be responsible for any data loss caused by this script.
 Launch `main.py`:
 ```
